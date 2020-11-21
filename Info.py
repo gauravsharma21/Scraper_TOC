@@ -16,9 +16,10 @@ class Info:
     def getString(self):
         return self.strings
 
-    def find(self, _tag):
-        output = []
+    def find(self, _tag = None, _id = None, _class = None):
         for tag in self.tags:
-            if(tag.props["tag"] == _tag):
-                output.append(tag)
-        return output
+            rem = tag.find(_tag, _id, _class)
+            if(rem != None):
+                return rem
+        return None
+        
