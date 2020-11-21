@@ -6,7 +6,8 @@ from Tag import Tag
 def isVoid(str):
     if(str == "area" or str == "base" or str == "br" or str == "col" or str == "command"
     or str == "embed" or str == "img" or str == "input" or str == "input" or str == "keygen"
-    or str == "link" or str == "meta" or str == "param" or str == "source" or str == "track" or str == "wbr"):
+    or str == "link" or str == "meta" or str == "param" or str == "source" or str == "track" or str == "wbr"
+    or str == "<!--"):
         return True
     else:
         return False
@@ -17,6 +18,9 @@ class Scraper:
         self.data = input
         if(re.match(regex, input)):
             self.getData(self.data)
+
+        self.data = self.data.replace("\\r", "")
+        self.data = self.data.replace("\\n", "")
 
     def getData(self, url):
         self.data = str(urlopen(url).read())
@@ -133,7 +137,11 @@ class Scraper:
                 break
 
             if(cur != ""):
-                strings.append(cur)
+                cur = cur.lstrip()
+                cur = cur.rstrip()
+                if(len(cur) != 0):
+                    strings.append(cur)
+
             cur = ""
             j = self.findEnd(i, str)
             l = i + 1
@@ -155,6 +163,8 @@ class Scraper:
             tags.append(Tag(props, par, str[i:j + 1], self.parse(str[l+1:r], t)))
             i = j + 1
     
+        cur = cur.lstrip()
+        cur = cur.rstrip()
         if(cur != ""):
             strings.append(cur)
 

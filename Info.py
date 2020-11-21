@@ -7,7 +7,6 @@ class Info:
         self.parent = parent
 
     def display(self, tabs = 0):
-        
         print("\t" * tabs , "parent: ", self.parent)
         print("\t" * tabs , "text: ",self.strings)
         print("\t" * tabs , "tags: ")

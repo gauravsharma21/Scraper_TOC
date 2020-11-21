@@ -13,15 +13,44 @@ class Tag:
         if(self.props == None):
             return
         props = dict()
-        arr = re.split(" ", self.props)
-        props["tag"] = arr[0]
-        for i in range(1, len(arr)):
-            s = re.split("=", arr[i], 1)
-            if(len(s) < 2):
-                continue
-            s[0].lstrip()
-            s[0].rstrip()
-            props[s[0]] = s[1]
+        balance = 0
+        cur = ""
+        j = 0
+        while(j < len(self.props) and self.props[j] != " "):
+            cur += self.props[j]
+            j += 1
+        
+        props["tag"] = cur
+        cur = ""
+        for i in range(j + 1, len(self.props)):
+            if(self.props[i] == ' ' and balance == 0):
+                s = re.split("=", cur)
+                s[0] = s[0].lstrip()
+                s[0] = s[0].rstrip()
+                if(len(s) == 0 or len(s[0]) == 0):
+                    continue
+                elif(len(s) == 1):
+                    props[s[0]] = True
+                else:
+                    props[s[0]] = s[1]
+                cur = ""
+            
+            elif(self.props[i] == '"'):
+                balance = balance ^ 1
+
+            cur += self.props[i]
+        
+        if(len(cur) != 0):
+            s = re.split("=", cur)
+            s[0] = s[0].lstrip()
+            s[0] = s[0].rstrip()
+            if(len(s) == 0 or len(s[0]) == 0):
+                p = 0    
+            elif(len(s) == 1):
+                props[s[0]] = True
+            else:
+                props[s[0]] = s[1]
+            cur = ""
         self.props = props
 
     def display(self, tabs = 0):
@@ -30,7 +59,10 @@ class Tag:
         print("\t" * tabs , "props: ", self.props)
         print("\t" * tabs , "parent: ", self.parent)
         print("\t" * tabs , "Children: ")
-        self.children.display(tabs + 1)
+        if(self.children != None):
+            self.children.display(tabs + 1)
+        else:
+            print("None")
 
     def getString(self):
         return self.children.getString()
