@@ -60,8 +60,9 @@ class Tag:
             return
         print("\t" * tabs , "props: ", self.props)
         print("\t" * tabs , "parent: ", self.parent)
-        print("\t" * tabs , "Children: ")
+        print("\t" * tabs , "Children: ", end=" ")
         if(self.children != None):
+            print()
             self.children.display(tabs + 1)
         else:
             print("None")

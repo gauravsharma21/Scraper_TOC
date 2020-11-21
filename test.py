@@ -14,4 +14,4 @@ for section in tree.children.tags:
         print("Company: ",company)
         print("Location: ", location)
 
-# tree.children.tags[0].display()
+tree.children.tags[0].display()
